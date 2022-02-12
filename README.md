@@ -1,7 +1,7 @@
 # NodeJS Files
 Guia para commitar
 
-```bash
+```
 Clone o repositório usando esse comando
 $ git clone https://github.com/LeonardoZanotti/nodejs-files.git
 
