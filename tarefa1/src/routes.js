@@ -2,6 +2,8 @@ const express = require('express');
 const routes = express.Router();
 const DB = require('./teams');
 
+const availableSeries = ['A', 'B', 'C', ''];
+
 routes.get('/teams', (req, res) => {
   return res.json(DB.teams);
 });
@@ -14,27 +16,26 @@ routes.get('/teams/:id', (req, res) => {
     if (character != undefined) {
       return res.json(character);
     } else {
-      return res.status(404).json({ msg: 'Personagem não encontrado.' });
+      return res.status(404).json({ msg: 'Time não encontrado.' });
     }
   }
 });
 
-routes.post('/newCharacter', (req, res) => {
+routes.post('/newTeam', (req, res) => {
   //const name = req.body.name;
-  const { name, species, house, ancestry, wand, hogwartsStudent, hogwartsStaff } = req.body;
-  if (name && species && house != undefined) {
+  const { name, city, state, series, titles, payroll } = req.body;
+  if (name && city && state && availableSeries.includes(series)) {
     const id = DB.teams.length + 1; // pode usar uuid para criar numeros aleatorios, pequeno bug de id
     DB.teams.push({
       id,
       name,
-      species,
-      house,
-      ancestry,
-      wand,
-      hogwartsStudent,
-      hogwartsStaff,
+      city,
+      state,
+      series,
+      titles,
+      payroll,
     });
-    return res.json({ msg: 'Personagem criado com sucesso.' });
+    return res.json({ msg: 'Time criado com sucesso.' });
   } else {
     return res.status(400).json({ msg: 'Dados obrigatórios não informados' });
   }
@@ -54,7 +55,7 @@ routes.delete('/teams/:id', (req, res) => {
   }
 });
 
-routes.put('/character/:id', (req, res) => {
+routes.put('/team/:id', (req, res) => {
   if (isNaN(req.params.id)) return res.sendStatus(400);
   else {
     const id = parseInt(req.params.id);
