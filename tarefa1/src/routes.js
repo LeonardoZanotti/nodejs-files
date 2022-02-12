@@ -12,20 +12,19 @@ routes.get('/teams/:id', (req, res) => {
   if (isNaN(req.params.id)) return res.sendStatus(400);
   else {
     const id = parseInt(req.params.id);
-    const character = DB.teams.find((c) => c.id == id);
-    if (character != undefined) {
-      return res.json(character);
+    const team = DB.teams.find((c) => c.id == id);
+    if (team) {
+      return res.json(team);
     } else {
       return res.status(404).json({ msg: 'Time não encontrado.' });
     }
   }
 });
 
-routes.post('/newTeam', (req, res) => {
-  //const name = req.body.name;
+routes.post('/teams', (req, res) => {
   const { name, city, state, series, titles, payroll } = req.body;
   if (name && city && state && availableSeries.includes(series)) {
-    const id = DB.teams.length + 1; // pode usar uuid para criar numeros aleatorios, pequeno bug de id
+    const id = DB.teams.length + 1;
     DB.teams.push({
       id,
       name,
@@ -47,31 +46,30 @@ routes.delete('/teams/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const index = DB.teams.findIndex((c) => c.id == id);
     if (index != -1) {
-      character = DB.teams.splice(index, 1); //a partir da posição index tira 1
-      return res.json({ msg: 'Personagem excluído com sucesso.', character });
+      const team = DB.teams.splice(index, 1);
+      return res.json({ msg: 'Time excluído com sucesso.', team });
     } else {
-      return res.status(404).json({ msg: 'Personagem não encontrado.' });
+      return res.status(404).json({ msg: 'Time não encontrado.' });
     }
   }
 });
 
-routes.put('/team/:id', (req, res) => {
+routes.put('/teams/:id', (req, res) => {
   if (isNaN(req.params.id)) return res.sendStatus(400);
   else {
     const id = parseInt(req.params.id);
-    const character = DB.teams.find((c) => c.id == id);
-    if (character != undefined) {
-      const { name, species, house, ancestry, wand, hogwartsStudent, hogwartsStaff } = req.body;
-      if (name != undefined) character.name = name;
-      if (species != undefined) character.species = species;
-      if (house != undefined) character.house = house;
-      if (ancestry != undefined) character.ancestry = ancestry;
-      if (wand != undefined) character.wand = wand;
-      if (hogwartsStudent != undefined) character.hogwartsStudent = hogwartsStudent;
-      if (hogwartsStaff != undefined) character.hogwartsStaff = hogwartsStaff;
-      return res.json(character);
+    const team = DB.teams.find((c) => c.id == id);
+    if (team) {
+      const { name, city, state, series, titles, payroll } = req.body;
+      if (name) team.name = name;
+      if (city) team.city = city;
+      if (state) team.state = state;
+      if (availableSeries.includes(series)) team.series = series;
+      if (titles) team.titles = titles;
+      if (payroll) team.payroll = payroll;
+      return res.json(team);
     } else {
-      return res.status(404).json({ msg: 'Personagem não encontrado' });
+      return res.status(404).json({ msg: 'Time não encontrado' });
     }
   }
 });
