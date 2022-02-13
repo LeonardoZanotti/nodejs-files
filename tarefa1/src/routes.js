@@ -5,20 +5,13 @@ const DB = require('./teams');
 const availableSeries = ['A', 'B', 'C', ''];
 
 routes.get('/teams', (req, res) => {
-  return res.json(DB.teams);
-});
-
-routes.get('/teams/:id', (req, res) => {
-  if (isNaN(req.params.id)) return res.sendStatus(400);
-  else {
-    const id = parseInt(req.params.id);
-    const team = DB.teams.find((c) => c.id == id);
-    if (team) {
-      return res.json(team);
-    } else {
-      return res.status(404).json({ msg: 'Time não encontrado.' });
-    }
+  if (req.query.search) {
+    const { search } = req.query;
+    const teams = DB.teams.find((t) => t.name.toLowerCase().includes(search.toLowerCase()));
+    return teams ? res.json(teams) : res.status(404).json({ msg: 'Time não encontrado.' });
   }
+
+  return res.json(DB.teams);
 });
 
 routes.post('/teams', (req, res) => {
@@ -44,7 +37,7 @@ routes.delete('/teams/:id', (req, res) => {
   if (isNaN(req.params.id)) return res.sendStatus(400);
   else {
     const id = parseInt(req.params.id);
-    const index = DB.teams.findIndex((c) => c.id == id);
+    const index = DB.teams.findIndex((t) => t.id == id);
     if (index != -1) {
       const team = DB.teams.splice(index, 1);
       return res.json({ msg: 'Time excluído com sucesso.', team });
@@ -58,7 +51,7 @@ routes.put('/teams/:id', (req, res) => {
   if (isNaN(req.params.id)) return res.sendStatus(400);
   else {
     const id = parseInt(req.params.id);
-    const team = DB.teams.find((c) => c.id == id);
+    const team = DB.teams.find((t) => t.id == id);
     if (team) {
       const { name, city, state, series, titles, payroll } = req.body;
       if (name) team.name = name;
