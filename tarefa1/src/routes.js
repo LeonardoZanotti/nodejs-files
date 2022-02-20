@@ -16,7 +16,7 @@ routes.get('/teams', (req, res) => {
 
 routes.post('/teams', (req, res) => {
   const { name, city, state, series, titles, payroll } = req.body;
-  if (name && city && state && availableSeries.includes(series)) {
+  if (name && city && state && availableSeries.includes(series) && payroll && titles) {
     const id = DB.teams.length + 1;
     DB.teams.push({
       id,
