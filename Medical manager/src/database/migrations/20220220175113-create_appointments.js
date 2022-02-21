@@ -2,20 +2,50 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
+    await queryInterface.createTable("Appointments", {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+      },
+      physicianId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "Physicians", key: "id" },
+        onUpdate: "RESTRICT",
+        onDelete: "RESTRICT",
+      },
+      patientId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "Patients", key: "id" },
+        onUpdate: "RESTRICT",
+        onDelete: "RESTRICT",
+      },
+      appointmentDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+      description: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      createAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+      updateAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"),
+      },
+    })
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+    await queryInterface.dropTable('Appointments');
   }
 };
