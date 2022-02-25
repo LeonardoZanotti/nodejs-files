@@ -11,6 +11,9 @@ $ cd nodejs-files/Medical\ manager
 Instalar dependências
 $ npm install
 
+Setar banco de dados
+$ npm run database
+
 Rodar o projeto
 $ npm run dev
 ```
