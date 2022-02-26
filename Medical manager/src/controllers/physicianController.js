@@ -1,7 +1,7 @@
 // newPhysician, updatePhysician, deletePhysician;
 
 const Physician = require('../models/Physician');
-// const Appointment = require('../models/Appointment');
+const Appointment = require('../models/Appointment');
 
 module.exports = {
   async listAllPhysicians(req, res, next) {
@@ -40,8 +40,8 @@ module.exports = {
   async deletePhysician(req, res, next) {
     const physicianId = req.params?.id;
 
-    // const appointmentExists = await Appointment.findOne({ where: { physicianId } });
-    // if (appointmentExists) return res.status(403).json({ msg: 'Médico possui consultas.' });
+    const appointmentExists = await Appointment.findOne({ where: { physicianId } });
+    if (appointmentExists) return res.status(403).json({ msg: 'Médico possui consultas.' });
 
     const deletedPhysician = await Physician.destroy({
       where: { id: physicianId },
