@@ -23,6 +23,8 @@ $ npm run dev
 Criar banco de dados
 $ npx sequelize db:create
 
+
+MIGRATION
 Criar uma migration
 $ npx sequelize migration:create --name=nome-da-migration
 
@@ -38,6 +40,8 @@ $ npx sequelize db:migrate:undo:all
 Desfazer migração específica
 $ npx sequelize db:migrate:undo:all --to MIGRATION_NAME
 
+
+SEEDER
 Criar um seeder
 $ npx sequelize seed:create --name nome-do-seeder
 

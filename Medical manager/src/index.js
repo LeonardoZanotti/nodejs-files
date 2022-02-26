@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+require('./src/database');
 
 app.use(express.json());
 
