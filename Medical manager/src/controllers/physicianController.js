@@ -1,11 +1,10 @@
-// newPhysician, updatePhysician, deletePhysician;
-
 const Physician = require('../models/Physician');
 const Appointment = require('../models/Appointment');
 
 module.exports = {
   async listAllPhysicians(req, res, next) {
     const physicians = await Physician.findAll({
+      include: [{ model: Appointment, as: 'appointments' }],
       order: [['name', 'ASC']],
     }).catch((err) => {
       res.status(500).json({ msg: 'Falha na conexão.' });
