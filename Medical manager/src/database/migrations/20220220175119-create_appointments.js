@@ -2,7 +2,7 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Appointments', {
+    await queryInterface.createTable('Appointment', {
       id: {
         type: Sequelize.INTEGER.UNSIGNED,
         primaryKey: true,
@@ -12,14 +12,14 @@ module.exports = {
       physicianId: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
-        references: { model: 'Physicians', key: 'id' },
+        references: { model: 'Physician', key: 'id' },
         onUpdate: 'RESTRICT',
         onDelete: 'RESTRICT',
       },
       patientId: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
-        references: { model: 'Patients', key: 'id' },
+        references: { model: 'Patient', key: 'id' },
         onUpdate: 'RESTRICT',
         onDelete: 'RESTRICT',
       },
@@ -46,6 +46,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Appointments');
+    await queryInterface.dropTable('Appointment');
   },
 };

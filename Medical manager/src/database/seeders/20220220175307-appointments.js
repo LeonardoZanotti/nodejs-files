@@ -3,7 +3,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert(
-      'Appointments',
+      'Appointment',
       [
         {
           physicianId: 1,
@@ -47,6 +47,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('appointments', null, {});
+    await queryInterface.bulkInsert('Appointment', null, {});
   },
 };
