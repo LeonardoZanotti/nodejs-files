@@ -20,7 +20,6 @@ module.exports = {
     if (!name || !email || !password) return res.status(404).json({ msg: 'Dados obrigatórios não foram preenchidos.' });
 
     const physicianExists = await Physician.findOne({ where: { email } });
-
     if (physicianExists) return res.status(403).json({ msg: 'Médico já cadastrado.' });
     else {
       const physician = await Physician.create({
@@ -35,6 +34,23 @@ module.exports = {
         ? res.status(201).json({ msg: 'Médico criado com sucesso.' })
         : res.status(400).json({ msg: 'Não foi possível cadastrar novo médico.' });
     }
+  },
+
+  async updatePhysician(req, res, next) {
+    const physicianId = req.params?.id;
+    const physician = req.body;
+
+    const physicianExists = await Physician.findByPk(physicianId);
+    if (!physicianExists) return res.status(404).json({ msg: 'Médico não existe.' });
+
+    if (physician.name || physician.email || physician.password) {
+      const physicianWithEmail = await Physician.findOne({ where: { email: physician.email } });
+      if (physicianWithEmail && physicianWithEmail.id != physician.id)
+        return res.status(400).json({ msg: 'Outro médico já usa este email.' });
+
+      await Physician.update(physician, { where: { id: physicianId } });
+      return res.status(200).json({ msg: 'Médico atualizado com sucesso.' });
+    } else return res.status(400).json({ msg: 'Campos obrigatórios não preenchidos.' });
   },
 
   async deletePhysician(req, res, next) {
