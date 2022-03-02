@@ -1,5 +1,6 @@
 const Appointment = require('../models/Appointment');
 const Patient = require('../models/Patient');
+const Sequelize = require("sequelize");
 const Physician = require('../models/Physician');
 
 module.exports = {
@@ -8,7 +9,6 @@ module.exports = {
         if (!name || !email || !phone) {
             res.status(400).json({ msg: "Dados obrigatórios não foram preenchidos." });
         }
-
         //Procura no BD por patient já existente
         const isPatientNew = await Patient.findOne({
             where: { name },
@@ -36,15 +36,17 @@ module.exports = {
         const name = req.body.name;
         if (!name)
             res.status(400).json({ msg: "Parâmetro nome está vazio.", });
-        const Op = Sequelize.Op;
-        const patient = await Patient.findAll({
-            where: { name: { [Op.like]: "%" + name + "%" }},
-        });
-        if (patient) {
-            if(patient == "")
-                res.status(404).json({ msg: "Patient não encontrado." });
-            else res.status(200).json({ patient });
-        } else res.status(404).json({ msg: "Patient não encontrado." });
+        else {
+            const Op = Sequelize.Op;
+            const patient = await Patient.findAll({
+                where: { name: { [Op.like]: "%" + name + "%" }},
+            });
+            if (patient) {
+                if(patient == "")
+                    res.status(404).json({ msg: "Patient não encontrado." });
+                else res.status(200).json({ patient });
+            } else res.status(404).json({ msg: "Patient não encontrado." });
+        }
     },
 
     // pesquisar paciente pelo id do médico
@@ -58,9 +60,18 @@ module.exports = {
         if (appointments) {
             if(appointments == "")
                 res.status(404).json({ msg: "Physician não encontrado." });
-            else res.status(200).json({ appointments });
+            else {
+                //TODO Mostrar os pacientes a partir do ID do médico
+                /*const patient = await Patient.findAll({
+                    where: { id: 2 },
+                });
+                res.status(200).json({ patient });*/
+
+                res.status(200).json({ appointments });
+            }
+
         } else
-                res.status(404).json({ msg: "Physician não encontrado." });
+            res.status(404).json({ msg: "Physician não encontrado." });
     },
 
     //editar patient
@@ -68,10 +79,10 @@ module.exports = {
         const patientId = req.params.id;
         const patient = req.body;
         if(!patientId)
-            res.status(400).jscon({ msg: "ID do patientr vazio." });
+            res.status(400).json({ msg: "ID do patient vazio." });
         else {
             const patientExists = await Patient.findByPk(patientId);
-            if(!PatientExists)
+            if(!patientExists)
                 res.status(404).json({ msg: "Patient não encontrado." });
             else {
                 if (patient.name || patient.email || patient.phone) {
