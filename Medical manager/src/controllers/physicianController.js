@@ -7,7 +7,7 @@ module.exports = {
       include: [{ model: Appointment, as: 'appointments' }],
       order: [['name', 'ASC']],
     }).catch((err) => {
-      res.status(500).json({ msg: 'Falha na conexão.' });
+      return res.status(500).json({ msg: 'Falha na conexão.' });
     });
     return physicians
       ? res.status(200).json({ physicians })
@@ -26,10 +26,10 @@ module.exports = {
         email,
         password,
       }).catch((err) => {
-        res.status(500).json({ msg: 'Falha na conexão.' });
+        return res.status(500).json({ msg: 'Falha na conexão.' });
       });
 
-      physician
+      return physician
         ? res.status(201).json({ msg: 'Médico criado com sucesso.' })
         : res.status(400).json({ msg: 'Não foi possível cadastrar novo médico.' });
     }
