@@ -11,8 +11,8 @@ Physician.init(connection);
 Patient.init(connection);
 Appointment.init(connection);
 
-Physician.associate(connection);
-Patient.associate(connection);
-Appointment.associate(connection);
+Physician.associate(connection.models);
+Patient.associate(connection.models);
+Appointment.associate(connection.models);
 
 module.exports = connection;

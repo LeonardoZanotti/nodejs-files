@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-const Appointment = require('../models/Appointment');
 
 class Patient extends Sequelize.Model {
   static init(sequelize) {
@@ -14,7 +13,7 @@ class Patient extends Sequelize.Model {
   }
 
   static associate(models) {
-    this.hasMany(Appointment, { as: 'appointments', foreignKey: 'patientId' });
+    this.hasMany(models.Appointment, { as: 'appointmentsPatient', foreignKey: 'patientId' });
   }
 }
 

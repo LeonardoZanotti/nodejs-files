@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-const Physician = require('../models/Physician');
 
 class Appointment extends Sequelize.Model {
   static init(sequelize) {
@@ -14,7 +13,10 @@ class Appointment extends Sequelize.Model {
     );
   }
 
-  static associate(models) {}
+  static associate(models) {
+    this.belongsTo(models.Physician, { as: 'appointmentsPhysician', foreignKey: 'physicianId' });
+    this.belongsTo(models.Patient, { as: 'appointmentsPatient', foreignKey: 'patientId' });
+  }
 }
 
 module.exports = Appointment;

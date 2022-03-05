@@ -4,7 +4,7 @@ const Appointment = require('../models/Appointment');
 module.exports = {
   async listAllPhysicians(req, res, next) {
     const physicians = await Physician.findAll({
-      include: [{ model: Appointment, as: 'appointments' }],
+      include: { model: Appointment, as: 'appointmentsPhysician' },
       order: [['name', 'ASC']],
     }).catch((err) => {
       return res.status(500).json({ msg: 'Falha na conexão.' });

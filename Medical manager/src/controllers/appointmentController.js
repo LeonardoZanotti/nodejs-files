@@ -1,7 +1,6 @@
 const Appointment = require('../models/Appointment');
-const Patient = require('../models/Patient');
-const Sequelize = require('sequelize');
 const Physician = require('../models/Physician');
+const Patient = require('../models/Patient');
 
 module.exports = {
   async newAppointment(req, res) {
@@ -36,6 +35,10 @@ module.exports = {
     if (!patientId) return res.status(400).json({ msg: 'Parâmetro id está vazio.' });
     const appointments = await Appointment.findAll({
       where: { patientId },
+      include: [
+        { model: Patient, as: 'appointmentsPatient' },
+        { model: Physician, as: 'appointmentsPhysician' },
+      ],
     });
     return appointments && appointments != ''
       ? res.status(200).json({ appointments })
@@ -47,6 +50,10 @@ module.exports = {
     if (!physicianId) return res.status(400).json({ msg: 'Parâmetro id está vazio.' });
     const appointments = await Appointment.findAll({
       where: { physicianId },
+      include: [
+        { model: Patient, as: 'appointmentsPatient' },
+        { model: Physician, as: 'appointmentsPhysician' },
+      ],
     });
     return appointments && appointments != ''
       ? res.status(200).json({ appointments })

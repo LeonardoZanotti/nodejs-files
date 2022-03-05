@@ -35,6 +35,7 @@ module.exports = {
       const Op = Sequelize.Op;
       const patient = await Patient.findAll({
         where: { name: { [Op.like]: '%' + name + '%' } },
+        include: { model: Appointment, as: 'appointmentsPatient' },
       });
       return patient && patient != ''
         ? res.status(200).json({ patient })
@@ -48,8 +49,8 @@ module.exports = {
     if (!physicianId) return res.status(400).json({ msg: 'Parâmetro id está vazio.' });
 
     const patients = await Patient.findAll({
-      include: { model: Appointment, as: 'appointments' },
-      where: { '$appointments.physicianId$': physicianId },
+      include: { model: Appointment, as: 'appointmentsPatient' },
+      where: { '$appointmentsPatient.physicianId$': physicianId },
     });
 
     return patients && patients != ''
