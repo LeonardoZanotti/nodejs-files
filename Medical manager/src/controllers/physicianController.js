@@ -1,7 +1,7 @@
 const Physician = require('../models/Physician');
 const Appointment = require('../models/Appointment');
 const bcrypt = require('bcryptjs');
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 const passwordValidation = (password) => {
   if (password.length < 8) return 'Senha deve ter no mínimo 8 caracteres.';
@@ -11,12 +11,9 @@ const passwordValidation = (password) => {
 };
 
 function generateToken(id) {
-	console.log(process.env.JWT_SECRET);
-	process.env.JWT_SECRET = Math.random().toString(36).slice(-20);
-	console.log(process.env.JWT_SECRET);
-	const token = jwt.sign({ id }, process.env.JWT_SECRET, {expiresIn: 82800, }); // Token expira em 24 horas
-	console.log(token);
-	return token;
+  process.env.JWT_SECRET = Math.random().toString(36).slice(-20);
+  const token = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: 82800 }); // Token expira em 24 horas
+  return token;
 }
 
 module.exports = {
