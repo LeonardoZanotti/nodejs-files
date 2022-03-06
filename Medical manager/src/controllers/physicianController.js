@@ -1,6 +1,7 @@
 const Physician = require('../models/Physician');
 const Appointment = require('../models/Appointment');
 const bcrypt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
 
 const passwordValidation = (password) => {
   if (password.length < 8) return 'Senha deve ter no mínimo 8 caracteres.';
@@ -9,14 +10,24 @@ const passwordValidation = (password) => {
   else return 'OK';
 };
 
+function generateToken(id) {
+	console.log(process.env.JWT_SECRET);
+	process.env.JWT_SECRET = Math.random().toString(36).slice(-20);
+	console.log(process.env.JWT_SECRET);
+	const token = jwt.sign({ id }, process.env.JWT_SECRET, {expiresIn: 82800, }); // Token expira em 24 horas
+	console.log(token);
+	return token;
+}
+
 module.exports = {
   async authentication(req, res, next) {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ msg: 'Campos obrigatórios vazios' });
     try {
-      const physician = await Appointment.findOne({ where: { email } });
-      return physician && bcrypt.compareSync(physician.password, password)
-        ? res.status(200).json({ msg: 'Autenticado com sucesso' })
+      const physician = await Physician.findOne({ where: { email } });
+      const token = generateToken(physician.id);
+      return physician && bcrypt.compareSync(password, physician.password)
+        ? res.status(200).json({ msg: 'Autenticado com sucesso', token })
         : res.status(404).json({ msg: 'Usuário ou senha inválidos' });
     } catch (err) {
       res.status(500).json({ msg: err.message });
