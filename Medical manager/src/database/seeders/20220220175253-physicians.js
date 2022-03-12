@@ -10,7 +10,7 @@ module.exports = {
         {
           name: 'John Doe',
           email: 'johndoe@gmail.com',
-          password: bcrypt.hashSync('strongpassword.', salt),
+          password: bcrypt.hashSync('s4trongpassword.', salt),
         },
         {
           name: 'Regina da Silva',
