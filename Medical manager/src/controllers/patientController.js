@@ -9,7 +9,7 @@ module.exports = {
 
     //Procura no BD por patient já existente
     const isPatientNew = await Patient.findOne({
-      where: { name },
+      where: { email },
     });
 
     if (isPatientNew) return res.status(403).json({ msg: 'Paciente já foi cadastrado.' });
